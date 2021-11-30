@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const tokens = require('./token');
 
 const USERS = [];
 const INFORMATION = [];
@@ -30,8 +31,19 @@ router.post('/login', async (req, res) => {
 	if (USERS.some((user) => user.email === email)) {
 		const user = USERS.find((user) => user.email === email);
 		if (await decryptPassword(password, user.password)) {
+			const accessToken = tokens.createAccessToken(user);
+			const refreshToken = tokens.createRefreshToken(user);
+
+			REFRESHTOKENS.push(refreshToken);
+
+			const { name, isAdmin } = user;
+
 			res.status(200).send({
-				message: 'You in',
+				accessToken,
+				refreshToken,
+				email,
+				name,
+				isAdmin,
 			});
 		} else {
 			res.status(403).send({

@@ -4,8 +4,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"test": "jest --maxWorkers=1",
-		"dev": "nodemon app.js",
+		"test": "jest",
+		"dev": "nodemon index.js",
 		"start": ""
 	},
 	"keywords": [],
