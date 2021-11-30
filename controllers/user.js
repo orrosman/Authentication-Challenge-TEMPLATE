@@ -159,6 +159,16 @@ router.get('/api/v1/users', (req, res) => {
 	}
 });
 
+router.get('/', (req, res) => {
+	console.log(
+		router.stack
+			.filter((r) => r.route)
+			.map((r) => {
+				return { method: Object.keys(r.route.methods)[0], path: r.route.path };
+			})
+	);
+});
+
 const createUserObject = async (email, name, password, isAdmin = false) => {
 	const hashedPassword = await encryptPassword(password);
 	const newUser = {
