@@ -1,1 +1,2 @@
-/* write the code to run app.js here */
+import server from './app';
+server;

@@ -10,3 +10,5 @@ app.use('/users', userRouter);
 app.listen(port, function () {
 	console.log('server running💨💨');
 });
+
+module.exports = app;
