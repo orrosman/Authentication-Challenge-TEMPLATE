@@ -140,6 +140,25 @@ router.get('/api/v1/information', (req, res) => {
 	}
 });
 
+router.get('/api/v1/users', (req, res) => {
+	try {
+		const token = req.headers['authorization'].split(' ')[1];
+		const tokenInfo = tokens.validateToken(token);
+
+		if (tokenInfo.isAdmin) {
+			res.status(200).send(USERS);
+		} else {
+			res.status(403).send({
+				message: 'Invalid Access Token',
+			});
+		}
+	} catch {
+		res.status(401).send({
+			message: 'Access Token Required',
+		});
+	}
+});
+
 const createUserObject = async (email, name, password, isAdmin = false) => {
 	const hashedPassword = await encryptPassword(password);
 	const newUser = {
