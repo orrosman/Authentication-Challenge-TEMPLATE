@@ -25,6 +25,26 @@ router.post('/register', async (req, res) => {
 	}
 });
 
+router.post('/login', async (req, res) => {
+	const { email, password } = req.body;
+	if (USERS.some((user) => user.email === email)) {
+		const user = USERS.find((user) => user.email === email);
+		if (await decryptPassword(password, user.password)) {
+			res.status(200).send({
+				message: 'You in',
+			});
+		} else {
+			res.status(403).send({
+				message: 'User or Password incorrect',
+			});
+		}
+	} else {
+		res.status(404).send({
+			message: 'cannot find user',
+		});
+	}
+});
+
 const createUserObject = async (email, name, password, isAdmin = false) => {
 	const hashedPassword = await encryptPassword(password);
 	const newUser = {
@@ -38,6 +58,10 @@ const createUserObject = async (email, name, password, isAdmin = false) => {
 
 const encryptPassword = async (password) => {
 	return await bcrypt.hash(password, saltRounds);
+};
+
+const decryptPassword = async (password, hashedPassword) => {
+	return await bcrypt.compare(password, hashedPassword);
 };
 
 module.exports = router;
