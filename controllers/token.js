@@ -7,7 +7,7 @@ const REFRESH_TOKEN_SECRET =
 	'892c84a4d62f610f70081249502e4683d96230e3b8dd4330e08f492edf9d349d77e6e2de376c668d88d6ecdaebd79c593031b0dc27e1ff962f5f00d8860f9021';
 
 const createAccessToken = (user) => {
-	return jwt.sign(user, ACCESS_TOKEN_SECRET, { expiresIn: '10m' });
+	return jwt.sign(user, ACCESS_TOKEN_SECRET, { expiresIn: '10s' });
 };
 
 const createRefreshToken = (user) => {

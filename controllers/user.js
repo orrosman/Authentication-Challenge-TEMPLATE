@@ -159,4 +159,17 @@ const decryptPassword = async (password, hashedPassword) => {
 	return await bcrypt.compare(password, hashedPassword);
 };
 
+const addAdminUser = async () => {
+	const adminUser = await createUserObject(
+		'admin@email.com',
+		'admin',
+		'Rc123456!',
+		true
+	);
+
+	USERS.push(adminUser);
+};
+
+addAdminUser();
+
 module.exports = router;
