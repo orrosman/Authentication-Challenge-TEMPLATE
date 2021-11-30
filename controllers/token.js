@@ -14,4 +14,12 @@ const createRefreshToken = (user) => {
 	return jwt.sign(user, REFRESH_TOKEN_SECRET);
 };
 
-module.exports = { createAccessToken, createRefreshToken };
+const validateToken = (token) => {
+	try {
+		return jwt.verify(token, ACCESS_TOKEN_SECRET) ? true : false;
+	} catch {
+		return false;
+	}
+};
+
+module.exports = { createAccessToken, createRefreshToken, validateToken };

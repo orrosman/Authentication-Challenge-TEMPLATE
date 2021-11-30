@@ -57,6 +57,26 @@ router.post('/login', async (req, res) => {
 	}
 });
 
+router.post('/tokenValidate', (req, res) => {
+	try {
+		const token = req.headers['authorization'].split(' ')[1];
+
+		if (tokens.validateToken(token)) {
+			res.status(200).send({
+				valid: true,
+			});
+		} else {
+			res.status(403).send({
+				message: 'Invalid Access Token',
+			});
+		}
+	} catch {
+		res.status(401).send({
+			message: 'Access Token Required',
+		});
+	}
+});
+
 const createUserObject = async (email, name, password, isAdmin = false) => {
 	const hashedPassword = await encryptPassword(password);
 	const newUser = {
