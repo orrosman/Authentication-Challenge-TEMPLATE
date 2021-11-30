@@ -101,6 +101,23 @@ router.post('/users/token', (req, res) => {
 		});
 	}
 });
+
+router.post('/users/logout', (req, res) => {
+	try {
+		const { token } = req.body;
+		const tokenIndex = REFRESHTOKENS.indexOf(token);
+
+		if (tokenIndex >= 0) {
+			REFRESHTOKENS.splice(tokenIndex, 1);
+			res.status(200).send('User Logged Out Successfully');
+		} else {
+			res.status(400).send('Invalid Refresh Token');
+		}
+	} catch {
+		res.status(400).send('Refresh Token Required');
+	}
+});
+
 router.get('/api/v1/information', (req, res) => {
 	try {
 		const token = req.headers['authorization'].split(' ')[1];
