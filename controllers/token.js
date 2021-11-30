@@ -14,9 +14,11 @@ const createRefreshToken = (user) => {
 	return jwt.sign(user, REFRESH_TOKEN_SECRET);
 };
 
-const validateToken = (token) => {
+const validateToken = (token, type = 'access') => {
 	try {
-		return jwt.verify(token, ACCESS_TOKEN_SECRET);
+		return type === 'access'
+			? jwt.verify(token, ACCESS_TOKEN_SECRET)
+			: jwt.verify(token, REFRESH_TOKEN_SECRET);
 	} catch {
 		return false;
 	}

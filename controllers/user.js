@@ -77,6 +77,30 @@ router.post('/users/tokenValidate', (req, res) => {
 	}
 });
 
+router.post('/users/token', (req, res) => {
+	try {
+		const { token } = req.body;
+		const refreshToken = REFRESHTOKENS.find(
+			(refreshToken) => refreshToken === token
+		);
+
+		if (refreshToken) {
+			const userInfo = tokens.validateToken(token, 'refresh');
+			delete userInfo.iat;
+			const newAccessToken = tokens.createAccessToken(userInfo);
+
+			res.status(200).send(newAccessToken);
+		} else {
+			res.status(403).send({
+				message: 'Invalid Refresh Token',
+			});
+		}
+	} catch {
+		res.status(401).send({
+			message: 'Refresh Token Required',
+		});
+	}
+});
 router.get('/api/v1/information', (req, res) => {
 	try {
 		const token = req.headers['authorization'].split(' ')[1];
