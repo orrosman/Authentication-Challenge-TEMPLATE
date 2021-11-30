@@ -8,7 +8,7 @@ const USERS = [];
 const INFORMATION = [];
 const REFRESHTOKENS = [];
 
-router.post('/register', async (req, res) => {
+router.post('/users/register', async (req, res) => {
 	const { email, user, password } = req.body;
 	if (USERS.some((user) => user.email === email)) {
 		res.status(409).send({
@@ -26,7 +26,7 @@ router.post('/register', async (req, res) => {
 	}
 });
 
-router.post('/login', async (req, res) => {
+router.post('/users/login', async (req, res) => {
 	const { email, password } = req.body;
 	if (USERS.some((user) => user.email === email)) {
 		const user = USERS.find((user) => user.email === email);
@@ -57,7 +57,7 @@ router.post('/login', async (req, res) => {
 	}
 });
 
-router.post('/tokenValidate', (req, res) => {
+router.post('/users/tokenValidate', (req, res) => {
 	try {
 		const token = req.headers['authorization'].split(' ')[1];
 
@@ -65,6 +65,28 @@ router.post('/tokenValidate', (req, res) => {
 			res.status(200).send({
 				valid: true,
 			});
+		} else {
+			res.status(403).send({
+				message: 'Invalid Access Token',
+			});
+		}
+	} catch {
+		res.status(401).send({
+			message: 'Access Token Required',
+		});
+	}
+});
+
+router.get('/api/v1/information', (req, res) => {
+	try {
+		const token = req.headers['authorization'].split(' ')[1];
+		const tokenInfo = tokens.validateToken(token);
+
+		if (tokenInfo) {
+			const userInfo = INFORMATION.find(
+				(user) => user.email === tokenInfo.email
+			);
+			res.status(200).send(userInfo);
 		} else {
 			res.status(403).send({
 				message: 'Invalid Access Token',

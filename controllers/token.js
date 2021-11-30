@@ -16,7 +16,7 @@ const createRefreshToken = (user) => {
 
 const validateToken = (token) => {
 	try {
-		return jwt.verify(token, ACCESS_TOKEN_SECRET) ? true : false;
+		return jwt.verify(token, ACCESS_TOKEN_SECRET);
 	} catch {
 		return false;
 	}
